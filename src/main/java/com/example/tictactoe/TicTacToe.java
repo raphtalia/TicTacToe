@@ -14,22 +14,22 @@ public class TicTacToe extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        widthChangeListener = (observable, oldValue, newValue) -> {
-            stage.heightProperty().removeListener(heightChangeListener);
-            stage.setHeight(newValue.doubleValue());
-            stage.heightProperty().addListener(heightChangeListener);
-        };
-        heightChangeListener = (observable, oldValue, newValue) -> {
-            stage.widthProperty().removeListener(widthChangeListener);
-            stage.setWidth(newValue.doubleValue());
-            stage.widthProperty().addListener(widthChangeListener);
-        };
-
-        stage.widthProperty().addListener(widthChangeListener);
-        stage.heightProperty().addListener(heightChangeListener);
+//        widthChangeListener = (observable, oldValue, newValue) -> {
+//            stage.heightProperty().removeListener(heightChangeListener);
+//            stage.setHeight(newValue.doubleValue());
+//            stage.heightProperty().addListener(heightChangeListener);
+//        };
+//        heightChangeListener = (observable, oldValue, newValue) -> {
+//            stage.widthProperty().removeListener(widthChangeListener);
+//            stage.setWidth(newValue.doubleValue());
+//            stage.widthProperty().addListener(widthChangeListener);
+//        };
+//
+//        stage.widthProperty().addListener(widthChangeListener);
+//        stage.heightProperty().addListener(heightChangeListener);
         
         FXMLLoader fxmlLoader = new FXMLLoader(TicTacToe.class.getResource("tictactoe.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 400, 400);
         stage.setTitle("Tic-tac-toe");
         stage.setScene(scene);
         stage.show();

@@ -33,17 +33,31 @@ public class TicTacToeBot extends Game {
 
         return null;
     }
-//
-//    public Vector2 getBestMove(char playerA, char playerB) {
-//        // playerA = us, playerB = enemy
-//        final Vector2 blockingMove = getBestMove(playerB);
-//        if (getScoreAfterMove(playerB, blockingMove) == Math.min(getColumns(), getRows()) - 1) {
-//            return blockingMove;
-//        }
-//
-//        return getBestMove(playerA);
-//    }
-//
+
+    public Vector2 getBestMove(char playerA, char playerB) {
+        // playerA = us, playerB = enemy
+        final int numRows = this.getRows();
+        final int numColumns = this.getColumns();
+
+        // Claim the middle cell if available.
+        if (numRows % 2 != 0 && numColumns % 2 != 0) {
+            final Vector2 mid = new Vector2(numRows / 2, numColumns / 2);
+            if (this.getCell(mid.getX(), mid.getY()) == ' ') {
+                return mid;
+            }
+        }
+
+        final int victoryScore = Math.min(numRows, numColumns);
+        final Vector2 blockingMove = getBestMove(playerB);
+        final Vector2 nonBlockingMove = getBestMove(playerA);
+
+        if (getScoreAfterMove(playerB, blockingMove) == victoryScore && getScoreAfterMove(playerA, nonBlockingMove) < victoryScore) {
+            return blockingMove;
+        }
+
+        return getBestMove(playerA);
+    }
+
     public int getScoreAfterMove(char player, Vector2 move) {
         TicTacToeBot clone = new TicTacToeBot(board);
         clone.setCell(move.getX(), move.getY(), player);
@@ -55,7 +69,7 @@ public class TicTacToeBot extends Game {
 
         for (int row = 0; row < this.getRows(); row++) {
             for (int column = 0; column < this.getColumns(); column++) {
-                if (this.getCell(column, row) == ' ') {
+                if (this.getCell(row, column) == ' ') {
                     emptyCells.add(new Vector2(row, column));
                 }
             }
@@ -80,8 +94,13 @@ public class TicTacToeBot extends Game {
 
         for (int row = 0; row < this.getRows(); row++) {
             for (int column = 0; column < this.getColumns(); column++) {
-                if (this.getCell(column, row) == player) {
+                final char owner = this.getCell(row, column);
+
+                if (owner == player) {
                     scores[row]++;
+                } else if (owner != ' ') {
+                    scores[row] = 0;
+                    break;
                 }
             }
         }
@@ -94,8 +113,13 @@ public class TicTacToeBot extends Game {
 
         for (int column = 0; column < this.getColumns(); column++) {
             for (int row = 0; row < this.getRows(); row++) {
-                if (this.getCell(column, row) == player) {
+                final char owner = this.getCell(row, column);
+
+                if (owner == player) {
                     scores[column]++;
+                } else if (owner != ' ') {
+                    scores[column] = 0;
+                    break;
                 }
             }
         }
@@ -112,15 +136,25 @@ public class TicTacToeBot extends Game {
 
         if (getCell(0, 0) == player) {
             for (int row = 1; row < getRows(); row++) {
-                if (getCell(row, row) == player) {
+                final char owner = this.getCell(row, row);
+
+                if (owner == player) {
                     scores[0] = row + 1;
+                } else if (owner != ' ') {
+                    scores[0] = 0;
+                    break;
                 }
             }
         }
         if (getCell(0, getRows() - 1) == player) {
             for (int row = 1; row < getRows(); row++) {
-                if (getCell(row, getRows() - row - 1) == player) {
+                final char owner = this.getCell(row, getRows() - row - 1);
+
+                if (owner == player) {
                     scores[1] = row + 1;
+                } else if (owner != ' ') {
+                    scores[1] = 0;
+                    break;
                 }
             }
         }

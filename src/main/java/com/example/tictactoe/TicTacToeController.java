@@ -5,13 +5,17 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 
 public class TicTacToeController {
     @FXML
     private GridPane grid;
+    @FXML
+    private Text winner;
     private TicTacToeBot game = new TicTacToeBot(3, 3);
     private Boolean debounce = false;
-    private int turn = 0;
+    private final String player = "X";
+    private final String bot = "O";
 
     private Button getCell(int row, int column) {
         for (Node node : grid.getChildren()) {
@@ -26,44 +30,46 @@ public class TicTacToeController {
     @FXML
     protected void onClick(ActionEvent event) {
         final Button button = (Button) event.getSource();
+        final int row = grid.getRowIndex(button);
+        final int column = grid.getColumnIndex(button);
 
-        if (button.getText().isEmpty() && !debounce) {
+        if (game.getCell(row, column) == ' ' && !debounce) {
             debounce = true;
 
-            final String player = "X";
-            final String bot = "O";
-
             {
-                // final String player = (turn % 2 == 0) ? "X" : "O";
                 button.setText(player);
-//                if (player.equals("X")) {
                 button.setStyle("-fx-text-fill: red;");
-//                } else {
-//                    button.setStyle("-fx-text-fill: blue;");
-//                }
-                System.out.println(grid.getColumnIndex(button) + " " + grid.getRowIndex(button));
-                game.setCell(grid.getColumnIndex(button), grid.getRowIndex(button), player.charAt(0));
-                turn++;
+                game.setCell(row, column, player.charAt(0));
             }
 
-            if (game.getWinner() == ' ') {
-                // final String text = (turn % 2 == 0) ? "X" : "O";
-                final Vector2 move = game.getBestMove(bot.charAt(0)); //game.getBestMove(player.charAt(0), bot.charAt(0));
-                System.out.println(move);
+            if (game.getWinner() == ' ' && !game.isFull()) {
+                final Vector2 move = game.getBestMove(bot.charAt(0), player.charAt(0));
                 final Button button2 = getCell(move.getX(), move.getY());
                 button2.setText(bot);
                 button2.setStyle("-fx-text-fill: blue;");
                 game.setCell(move.getX(), move.getY(), bot.charAt(0));
-                // turn++;
             }
 
             if (game.getWinner() != ' ') {
-                System.out.println("Winner: " + game.getWinner());
-                System.out.println("Game over!");
+                winner.setText(game.getWinner() + " wins!");
+            } else if (game.isFull()) {
+                winner.setText("Draw!");
             }
 
             debounce = false;
         }
+    }
+
+    @FXML
+    protected void onReset() {
+        winner.setText("");
+
+        for (Node node : grid.getChildren()) {
+            final Button button = (Button) node;
+            button.setText("");
+        }
+
+        game = new TicTacToeBot(game.getRows(), game.getColumns());
     }
 
     public void initialize() {
@@ -72,6 +78,7 @@ public class TicTacToeController {
                 final Button button = new Button();
                 button.setOnAction(this::onClick);
                 button.setPrefSize(1000, 1000);
+                button.setText(x + " " + y);
                 grid.add(button, x, y);
             }
         }
