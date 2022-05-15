@@ -78,7 +78,6 @@ public class TicTacToeController {
                 final Button button = new Button();
                 button.setOnAction(this::onClick);
                 button.setPrefSize(1000, 1000);
-                button.setText(x + " " + y);
                 grid.add(button, x, y);
             }
         }
