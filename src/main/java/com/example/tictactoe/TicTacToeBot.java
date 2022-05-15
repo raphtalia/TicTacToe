@@ -33,17 +33,17 @@ public class TicTacToeBot extends Game {
 
         return null;
     }
-
-    public Vector2 getBestMove(char playerA, char playerB) {
-        // playerA = us, playerB = enemy
-        final Vector2 blockingMove = getBestMove(playerB);
-        if (getScoreAfterMove(playerB, blockingMove) == Math.min(getColumns(), getRows()) - 1) {
-            return blockingMove;
-        }
-
-        return getBestMove(playerA);
-    }
-
+//
+//    public Vector2 getBestMove(char playerA, char playerB) {
+//        // playerA = us, playerB = enemy
+//        final Vector2 blockingMove = getBestMove(playerB);
+//        if (getScoreAfterMove(playerB, blockingMove) == Math.min(getColumns(), getRows()) - 1) {
+//            return blockingMove;
+//        }
+//
+//        return getBestMove(playerA);
+//    }
+//
     public int getScoreAfterMove(char player, Vector2 move) {
         TicTacToeBot clone = new TicTacToeBot(board);
         clone.setCell(move.getX(), move.getY(), player);

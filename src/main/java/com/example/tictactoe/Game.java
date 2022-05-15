@@ -63,7 +63,7 @@ public class Game {
     public boolean isFull() {
         for (int row = 0; row < this.getRows(); row++) {
             for (int column = 0; column < this.getColumns(); column++) {
-                if (this.getCell(column, row) == ' ') {
+                if (this.getCell(row, column) == ' ') {
                     return false;
                 }
             }
