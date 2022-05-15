@@ -42,11 +42,11 @@ public class Game {
         return this.board.length;
     }
 
-    public char getCell(int column, int row) {
+    public char getCell(int row, int column) {
         return this.board[row][column];
     }
 
-    public void setCell(int column, int row, char player) {
+    public void setCell(int row, int column, char player) {
         if (column < 0 || column >= this.getColumns() || row < 0 || row >= this.getRows()) {
             throw new IllegalArgumentException("Invalid cell: " + row + "," + column);
         }

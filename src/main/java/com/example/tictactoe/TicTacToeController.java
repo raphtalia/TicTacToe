@@ -11,7 +11,7 @@ public class TicTacToeController {
     private GridPane grid;
     private TicTacToeBot game = new TicTacToeBot(3, 3);
     private Boolean debounce = false;
-    // private  int turn = 0;
+    private  int turn = 0;
 
     private Button getCell(int row, int column) {
         for (Node node : grid.getChildren()) {
@@ -30,27 +30,32 @@ public class TicTacToeController {
         if (button.getText().isEmpty() && !debounce) {
             debounce = true;
 
-            final String player = "X";
-            final String bot = "O";
+//            final String player = "X";
+//            final String bot = "O";
 
             {
-                // final String text = (turn % 2 == 0) ? "X" : "O";
+                final String player = (turn % 2 == 0) ? "X" : "O";
                 button.setText(player);
-                button.setStyle("-fx-text-fill: red;");
+                if (player.equals("X")) {
+                    button.setStyle("-fx-text-fill: red;");
+                } else {
+                    button.setStyle("-fx-text-fill: blue;");
+                }
+                System.out.println(grid.getColumnIndex(button) + " " + grid.getRowIndex(button));
                 game.setCell(grid.getColumnIndex(button), grid.getRowIndex(button), player.charAt(0));
-                // turn++;
+                turn++;
             }
 
-            if (game.getWinner() == ' ') {
-                // final String text = (turn % 2 == 0) ? "X" : "O";
-                final Vector2 move = game.getBestMove(player.charAt(0), bot.charAt(0));
-                System.out.println(move);
-                final Button button2 = getCell(move.getX(), move.getY());
-                button2.setText(bot);
-                button2.setStyle("-fx-text-fill: blue;");
-                game.setCell(move.getX(), move.getY(), bot.charAt(0));
-                // turn++;
-            }
+//            if (game.getWinner() == ' ') {
+//                // final String text = (turn % 2 == 0) ? "X" : "O";
+//                final Vector2 move = game.getBestMove(player.charAt(0), bot.charAt(0));
+//                System.out.println(move);
+//                final Button button2 = getCell(move.getX(), move.getY());
+//                button2.setText(bot);
+//                button2.setStyle("-fx-text-fill: blue;");
+//                game.setCell(move.getX(), move.getY(), bot.charAt(0));
+//                // turn++;
+//            }
 
             if (game.getWinner() != ' ') {
                 System.out.println("Winner: " + game.getWinner());
